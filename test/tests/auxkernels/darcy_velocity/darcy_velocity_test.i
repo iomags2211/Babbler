@@ -7,6 +7,15 @@
 
 [Variables]
   [pressure]
+    order = FIRST
+    family = LAGRANGE
+  []
+[]
+
+[AuxVariables]
+  [velocity]
+    order = CONSTANT
+    family = MONOMIAL_VEC
   []
 []
 
@@ -17,9 +26,18 @@
   []
 []
 
+[AuxKernels]
+  [velocity]
+    type = DarcyVelocity
+    variable = velocity
+    pressure = pressure
+    execute_on = TIMESTEP_END
+  []
+[]
+
 [Materials]
-  [filter]
-    type = PackedColumn # Provides permeability and viscosity of water through packed 1mm spheres
+  [column]
+    type = PackedColumn
   []
 []
 
@@ -41,6 +59,7 @@
 [Executioner]
   type = Steady
   solve_type = PJFNK
+  l_tol = 1e-07 # tighter tolerance to acheive a numerically constant velocity field on 64-bit procs
   petsc_options_iname = '-pc_type -pc_hypre_type'
   petsc_options_value = 'hypre boomeramg'
 []
