@@ -14,7 +14,16 @@
   [diffusion]
     type = DarcyPressure
     variable = pressure
-    permeability = 0.8451e-09
+  []
+[]
+
+[Materials]
+  [filter]
+    type = PackedColumn # Provides permeability and viscosity of water through packed 1mm spheres
+    diameter = 2
+    viscosity = 1e-03
+    output_properties = 'permeability viscosity'
+    outputs = exodus
   []
 []
 
